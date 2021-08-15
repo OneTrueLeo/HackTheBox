@@ -1,11 +1,11 @@
 ## Phase 1: Enumeration
 
-As always we start off with an nmap scan:
+As always we start off with a nmap scan:
 
 ![](/images/nmap.png)
 
 Nmap didn't show any outdated services, so we can check out the website. By visiting http://10.10.10.242 we can see that it's a static page - nothing interesting there.
-> Checking the source code with Ctrl+U doesn't show anything interesting either, however
+> Checking the source code with Ctrl+U doesn't show anything interesting either, however,
 > after going over to network tab through developer tools I saw this response header: ```X-Powered-By: PHP/8.1.0-dev```
 * Since PHP 8.1.0 is outdated it's probably vulnerable to an exploit => ```https://www.exploit-db.com/exploits/49933```
 
@@ -33,7 +33,7 @@ I started things out by running sudo -l to see which commands can be executed as
 
 So now I simply executed ```sudo knife exec --exec "exec '/bin/sh -i' "``` in the command line to get root.
 
-After that I navigated to /root and used ```cat root.txt``` to get root flag.
+After that, I navigated to /root and used ```cat root.txt``` to get root flag.
 
 ![](/images/rootflagblur.png)
 
