@@ -2,7 +2,7 @@
 
 As always we start off with an nmap scan:
 
-![](/images/user.png)
+![](/images/nmap.png)
 
 Nmap didn't show any outdated services, so we can check out the website. By visiting http://10.10.10.242 we can see that it's a static page - nothing interesting there.
 > Checking the source code with Ctrl+U doesn't show anything interesting either, however
