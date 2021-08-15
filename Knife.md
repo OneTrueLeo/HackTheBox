@@ -1,4 +1,4 @@
-##Phase 1: Enumeration
+## Phase 1: Enumeration
 
 As always we start off with an nmap scan:
 
@@ -9,7 +9,7 @@ Visiting 10.10.10.242 we can see that it's a static page - nothing interesting t
 > After going over to network tab through developer tools I saw this response header: ```X-Powered-By: PHP/8.1.0-dev```
 * Since PHP 8.1.0 is outdated it's probably vulnerable to an exploit => ```https://www.exploit-db.com/exploits/49933```
 
-##Phase 2: Exploitation
+## Phase 2: Exploitation
 
 First I set up nc to listen on port 9001 (nc -lvnp 9001), then
 I used Burp Suite and FoxyProxy to intercept request of http://10.10.10.242/ and send this request:
@@ -21,7 +21,7 @@ I sent the request and got a reverse shell:
 I then navigated to home/james and used ```cat user.txt``` to obtain the user flag
 (user flag image)
 
-##Phase 3: Privilege escalation
+## Phase 3: Privilege escalation
 
 I started things out by running sudo -l to see which commands can be executed as sudo on this machine, as it turns out, we can execute /usr/bin/knife. Great!
 (image of sudo-l)
