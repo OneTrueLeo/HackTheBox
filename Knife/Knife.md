@@ -32,6 +32,7 @@ I started things out by running sudo -l to see which commands can be executed as
 ![](images/sudocmd.png)
 
 So now I simply executed ```sudo knife exec --exec "exec '/bin/sh -i' "``` in the command line to get root.
+
 After that I navigated to /root and used ```cat root.txt``` to get root flag.
 
 ![](/images/rootflagblur.png)
