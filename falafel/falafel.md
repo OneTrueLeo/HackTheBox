@@ -10,8 +10,8 @@ Web Directory Enumeration (Gobuster)
 
 * cyberlaw.txt looked like an interesting text page, which disclosed a user named `chris`.
 * ![image](https://user-images.githubusercontent.com/88967140/178945084-83ed301e-ba19-4c43-ada6-9f99fe908af5.png)
-
-
+</br>
+</br>
 
 **Initial Foothold**
 
@@ -55,8 +55,8 @@ I successfully logged in by using `240610708` as the password for `admin`.
 At the start I tried to upload a .php file to see if we can get an easy PHPreverse shell.
 ![image](https://user-images.githubusercontent.com/88967140/178953133-25763a14-7af2-4356-96e9-3f48070d1dde.png)
 From this image we can clearly see .php files won't work.
-
-
+</br>
+</br>
 
 **File Name Truncation**
 
@@ -66,8 +66,8 @@ What I did was create a file with 251 characters using `/usr/share/metasploit-fr
 
 Interestingly enough the output mentioned the file name being too long and shortening it, which turned out to be from 255 characters to 236.
 ![image](https://user-images.githubusercontent.com/88967140/178954663-adad24d9-8614-4fe3-96a5-111256cfe655.png)
-
-
+</br>
+</br>
 
 **PHP REVERSE SHELL**
 
@@ -82,8 +82,8 @@ So now we send a request with `leo=rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|/bin/s
 
  And finally I got the shell.
  ![image](https://user-images.githubusercontent.com/88967140/178956561-cdabbc78-1a05-4a42-8880-6d899fa95fa5.png)
- 
- 
+ </br>
+ </br>
  
  **Privilege Escalation**
  **www-data -> moshe (Password reuse)**
