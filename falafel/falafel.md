@@ -1,6 +1,7 @@
 Initial Recon
 
 nmap
+
 ![image](https://user-images.githubusercontent.com/88967140/178944865-a3ef8183-1cd8-4fed-ae77-66f69aceacd8.png)
 
 Web Directory Enumeration (Gobuster)
