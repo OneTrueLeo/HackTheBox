@@ -1,4 +1,4 @@
-Initial Recon
+**Initial Recon**
 
 Nmap
 
@@ -11,15 +11,13 @@ Web Directory Enumeration (Gobuster)
 * cyberlaw.txt looked like an interesting text page, which disclosed a user named `chris`.
 * ![image](https://user-images.githubusercontent.com/88967140/178945084-83ed301e-ba19-4c43-ada6-9f99fe908af5.png)
 
-Initial Foothold
+**Initial Foothold**
 
 SQL Injection
 
 Since there wasn't anything else other than the login form, I captured the login POST via Burp and used it in `sqlmap`.
 ![image](https://user-images.githubusercontent.com/88967140/178946925-b0d2ebe8-d070-4991-92ed-030cef796d44.png)
 ![image](https://user-images.githubusercontent.com/88967140/178946947-2a01e5a4-efca-491f-b15f-a59adc17788d.png)
-
-SQLMap
 
 Sending different usernames in the login form returned different results - 
 ![image](https://user-images.githubusercontent.com/88967140/178949194-20b06a3f-c7de-47b4-91ab-7ad42d387bf1.png)
@@ -30,4 +28,21 @@ Notice how entering `admin` as the username would show `Wrong identification` in
 
 By this it can be deduced that this login form is vulnerable to a boolean-based blind injection (the username= parameter).
 
-So basically "Wrong identification" = TRUE, "Try again.." = FALSE.
+So basically, "Wrong identification" = TRUE, "Try again.." = FALSE.
+
+SQLMap
+![image](https://user-images.githubusercontent.com/88967140/178950269-cb0b93b3-6c02-4b91-b68f-905466743b9f.png)
+
+Effectively we can use `Wrong identification` to see if we're on the right track. All we're doing here is dumping credentials from `falafel` database.
+
+![image](https://user-images.githubusercontent.com/88967140/178951074-60df6e3e-7bd2-4218-bab1-63295b690501.png)
+
+PHP Type Juggling
+
+Notice how the password for admin is hashed - it begins with 0e. We can try using magic tables to bypass the authentication and get into the account since 0 to exponent of 462 is still 0. Right here we'll be abusing PHP's Loose comparison weakness.
+
+* Magic Hashes
+
+For this we'll be using MD5 “Magic Number" (from https://www.whitehatsec.com/blog/magic-hashes/) 240610708 as the md5 hash for this string would also start with 0e. As a result this magic hash would collide with other hashes as both are treated as 0 and therefore would compare to be **true**
+
+So after 
