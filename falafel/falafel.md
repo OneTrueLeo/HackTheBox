@@ -27,5 +27,7 @@ Sending different usernames in the login form returned different results -
 ![image](https://user-images.githubusercontent.com/88967140/178949211-e65cf870-43d0-4f3a-a36a-a08d21bc77ab.png)
 
 Notice how entering `admin` as the username would show `Wrong identification` in the response, but using `test` would show `Try again..`.
+
 By this it can be deduced that this login form is vulnerable to a boolean-based blind injection (the username= parameter).
+
 So basically "Wrong identification" = TRUE, "Try again.." = FALSE.
