@@ -112,6 +112,7 @@ Afterwards, I used gimp to open this file as `Raw image data`, set the width and
 </br>
 
 **yossi -> root**
+
 So now that I got the password, I used it to SSH in as `yossi`.
 ![image](https://user-images.githubusercontent.com/88967140/178967068-03ce0714-b4c6-49cc-adfe-123314ae11e4.png)
 
@@ -122,6 +123,7 @@ https://wiki.debian.org/SystemGroups tells us that `The group disk can be very d
 </br>
 
 **Getting root Shell**
+
 With this information at my disposal, I decided to `cat` RSA private key for `root` since I'd be able to SSH in as root using that exact key.
 ![image](https://user-images.githubusercontent.com/88967140/178967911-6144c2d0-46fc-43da-b919-657f69bb192a.png)
 
